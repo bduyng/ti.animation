@@ -24,6 +24,10 @@
 
 - (id)isPlaying:(id)unused;
 
+- (void)playFromToProgress:(id)arg;
+
+- (void)playFromToFrame:(id)arg;
+
 #pragma mark Properties
 
 - (void)setProgress:(id)progress;
@@ -39,5 +43,7 @@
 - (id)loop;
 
 - (id)duration;
+
+- (void)setTintColor:(id)arg;
 
 @end

@@ -27,35 +27,35 @@
         ENSURE_TYPE(file, NSString);
         ENSURE_TYPE_OR_NIL(autoStart, NSNumber);
         ENSURE_TYPE_OR_NIL(contentMode, NSNumber);
-        
+
         // Handle both "file.json" and "file"
         if ([file hasSuffix:@".json"]) {
             file = [file stringByDeletingPathExtension];
         }
-        
+
         animationView = [LOTAnimationView animationNamed:file];
-        
+
         // Handle content mode
         NSArray *validContentModes = @[NUMINT(UIViewContentModeScaleAspectFit), NUMINT(UIViewContentModeScaleAspectFill), NUMINT(UIViewContentModeScaleToFill)];
-        
+
         if (contentMode && [validContentModes containsObject:contentMode]) {
             [animationView setContentMode:[TiUtils intValue:contentMode]];
         } else {
             [animationView setContentMode:UIViewContentModeScaleAspectFit];
-            
+
             if (contentMode) {
                 NSLog(@"[ERROR] The \"contentMode\" property is not valid (CONTENT_MODE_ASPECT_FIT, CONTENT_MODE_ASPECT_FILL or CONTENT_MODE_SCALE_FILL), defaulting to CONTENT_MODE_ASPECT_FIT");
             }
         }
 
         [[self view] addSubview:animationView];
-        
+
         // Handle auto-start
         if ([TiUtils boolValue:autoStart def:NO]) {
             [self start:nil];
         }
     }
-    
+
     return animationView;
 }
 
@@ -64,15 +64,15 @@
 - (void)start:(id)args
 {
     ENSURE_UI_THREAD(start, args);
-    
+
     if ([args count] == 1) {
         KrollCallback *callback = nil;
         ENSURE_ARG_AT_INDEX(callback, args, 0, KrollCallback);
-        
+
         [[self animationView] playWithCompletion:^(BOOL animationFinished) {
             NSDictionary *propertiesDict = @{@"finished": NUMBOOL(animationFinished)};
             NSArray *invocationArray = [[NSArray alloc] initWithObjects:&propertiesDict count:1];
-            
+
             [callback call:invocationArray thisObject:self];
         }];
     } else {
@@ -90,15 +90,15 @@
 {
     ENSURE_UI_THREAD(addViewToLayer, args);
     ENSURE_SINGLE_ARG(args, NSDictionary);
-    
+
     id viewProxy = [args objectForKey:@"view"];
     id layerName = [args objectForKey:@"layer"];
-    
+
     ENSURE_TYPE(viewProxy, TiViewProxy);
     ENSURE_TYPE(layerName, NSString);
-    
+
     [self rememberProxy:viewProxy];
-    
+
     [[self animationView] addSubview:[viewProxy view]
                         toLayerNamed:layerName applyTransform:NO];
 }
@@ -107,7 +107,7 @@
 {
     ENSURE_UI_THREAD(setProgress, progress);
     ENSURE_TYPE(progress, NSNumber);
-    
+
     [[self animationView] setAnimationProgress:[TiUtils floatValue:progress]];
     [self replaceValue:progress forKey:@"progress" notification:NO];
 }
@@ -135,7 +135,7 @@
 {
     ENSURE_UI_THREAD(setLoop, loop);
     ENSURE_TYPE(loop, NSNumber);
-    
+
     [[self animationView] setLoopAnimation:[TiUtils boolValue:loop]];
     [self replaceValue:loop forKey:@"loop" notification:NO];
 }
@@ -161,12 +161,35 @@
     id value = [arg objectForKey:@"value"];
     id key = [arg objectForKey:@"key"];
     id frame = [arg objectForKey:@"frame"];
-    
+
     ENSURE_TYPE(value, NSString);
     ENSURE_TYPE(key, NSString);
     ENSURE_TYPE(frame, NSNumber);
-    
+
     [[self animationView] setValue:[[TiUtils colorValue:value] _color] forKeypath:key atFrame:frame];
+}
+
+- (void)playFromToProgress:(id)arg
+{
+    ENSURE_UI_THREAD(playFromToProgress, arg);
+    ENSURE_SINGLE_ARG(arg, NSDictionary);
+    id from = [arg objectForKey:@"from"];
+    id to = [arg objectForKey:@"to"];
+    [[self animationView] playFromProgress:[TiUtils floatValue:from def:0.0] toProgress:[TiUtils floatValue:to def:1.0] withCompletion:^(BOOL animationFinished) {
+        // do something...
+    }];
+}
+
+- (void)playFromToFrame:(id)arg
+{
+    ENSURE_UI_THREAD(playFromToFrame, arg);
+    ENSURE_SINGLE_ARG(arg, NSDictionary);
+    id from = [arg objectForKey:@"from"];
+    id to = [arg objectForKey:@"to"];
+    
+    [[self animationView] playFromFrame:[TiUtils numberFromObject:from] toFrame:[TiUtils numberFromObject:to] withCompletion:^(BOOL animationFinished) {
+        // do something...
+    }];
 }
 
 @end
