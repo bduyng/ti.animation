@@ -155,4 +155,18 @@
     return NUMFLOAT([[self animationView] animationDuration]);
 }
 
+- (void)setTintColor:(id)arg
+{
+    ENSURE_SINGLE_ARG(arg, NSDictionary);
+    id value = [arg objectForKey:@"value"];
+    id key = [arg objectForKey:@"key"];
+    id frame = [arg objectForKey:@"frame"];
+    
+    ENSURE_TYPE(value, NSString);
+    ENSURE_TYPE(key, NSString);
+    ENSURE_TYPE(frame, NSNumber);
+    
+    [[self animationView] setValue:[[TiUtils colorValue:value] _color] forKeypath:key atFrame:frame];
+}
+
 @end
