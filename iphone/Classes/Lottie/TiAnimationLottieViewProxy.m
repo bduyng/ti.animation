@@ -117,4 +117,42 @@
     [[self animationView] addView:[viewProxy view] toLayer:layerName];
 }
 
+- (void)setTintColor:(id)arg
+{
+    ENSURE_SINGLE_ARG(arg, NSDictionary);
+    id value = [arg objectForKey:@"value"];
+    id key = [arg objectForKey:@"key"];
+    id frame = [arg objectForKey:@"frame"];
+    
+    ENSURE_TYPE(value, NSString);
+    ENSURE_TYPE(key, NSString);
+    ENSURE_TYPE(frame, NSNumber);
+    
+    [[self animationView] setTintColor:[[TiUtils colorValue:value] _color] forKeypath:key atFrame:frame];
+}
+
+- (void)playFromToProgress:(id)arg
+{
+    ENSURE_UI_THREAD(playFromToProgress, arg);
+    ENSURE_SINGLE_ARG(arg, NSDictionary);
+    id from = [arg objectForKey:@"from"];
+    id to = [arg objectForKey:@"to"];
+    
+    KrollCallback *callback = nil;
+    
+    [[self animationView] playFromProgress:[TiUtils floatValue:from def:0.0] toProgress:[TiUtils floatValue:to def:1.0] withCompletion:callback];
+}
+
+- (void)playFromToFrame:(id)arg
+{
+    ENSURE_UI_THREAD(playFromToFrame, arg);
+    ENSURE_SINGLE_ARG(arg, NSDictionary);
+    id from = [arg objectForKey:@"from"];
+    id to = [arg objectForKey:@"to"];
+    
+    KrollCallback *callback = nil;
+    
+    [[self animationView] playFromFrame:[TiUtils numberFromObject:from] toFrame:[TiUtils numberFromObject:to] withCompletion:callback];
+}
+
 @end

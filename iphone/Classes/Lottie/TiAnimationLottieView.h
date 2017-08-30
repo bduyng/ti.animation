@@ -19,6 +19,8 @@
 - (void)playWithCompletionHandler:(KrollCallback*)callback;
 - (void)pause;
 - (void)addView:(UIView*)view toLayer:(NSString*)layer;
+- (void)playFromProgress:(CGFloat)from toProgress:(CGFloat)to withCompletion:(KrollCallback*)completion;
+- (void)playFromFrame:(NSNumber*)from toFrame:(NSNumber*)to withCompletion:(KrollCallback*)completion;
 
 - (void)setProgress:(CGFloat)progress;
 - (void)setSpeed:(CGFloat)speed;
@@ -28,5 +30,6 @@
 - (CGFloat)getDuration;
 - (BOOL)getLoop;
 - (BOOL)isPlaying;
+- (void)setTintColor:(UIColor*)tintColor forKeypath:(NSString*)key atFrame:(NSNumber*)frame;
 
 @end

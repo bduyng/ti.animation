@@ -143,6 +143,25 @@
     [[self animationView] setLoopAnimation:loop];
 }
 
+- (void)setTintColor:(UIColor*)tintColor forKeypath:(NSString*)key atFrame:(NSNumber*)frame
+{
+    [[self animationView] setValue:tintColor forKeypath:key atFrame:frame];
+}
+
+
+- (void)playFromProgress:(CGFloat)from toProgress:(CGFloat)to withCompletion:(KrollCallback*)completion
+{
+    [[self animationView] playFromProgress:from toProgress:to withCompletion:^(BOOL animationFinished) {
+        // do something...
+    }];
+}
+- (void)playFromFrame:(NSNumber*)from toFrame:(NSNumber*)to withCompletion:(KrollCallback*)completion
+{
+    [[self animationView] playFromFrame:from toFrame:to withCompletion:^(BOOL animationFinished) {
+        // do something...
+    }];
+}
+
 #pragma mark Layout utilities
 
 #ifdef TI_USE_AUTOLAYOUT

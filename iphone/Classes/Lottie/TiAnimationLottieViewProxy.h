@@ -19,6 +19,8 @@
 - (void)pause:(id)unused;
 - (void)resume:(id)unused;
 - (void)addViewToLayer:(id)args;
+- (void)playFromToProgress:(id)arg;
+- (void)playFromToFrame:(id)arg;
 
 #pragma mark Properties
 
@@ -30,5 +32,6 @@
 - (void)setProgress:(id)progress;
 - (void)setSpeed:(id)speed;
 - (void)setLoop:(id)animation;
+- (void)setTintColor:(id)arg;
 
 @end

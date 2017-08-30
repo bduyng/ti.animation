@@ -60,6 +60,9 @@ win.add(createButtonWithAction('Start animation', startAnimation));
 win.add(createButtonWithAction('Pause animation', pauseAnimation));
 win.add(createButtonWithAction('Resume animation', resumeAnimation));
 win.add(createButtonWithAction('Double speed', doubleSpeed));
+win.add(createButtonWithAction('Lottie: tintColor', setTintColor));
+win.add(createButtonWithAction('Lottie: playFromToProgress', playFromToProgress));
+win.add(createButtonWithAction('Lottie: playFromToFrame', playFromToFrame));
 
 function onOpen(e) {
     var dur = (isAndroid) ? lottieView.getDuration() : (Math.floor(lottieView.getDuration() * 1000));
@@ -123,4 +126,26 @@ function pauseAnimation() {
 function resumeAnimation() {
     // lottieView.resume();
     keyframeView.resume();
+}
+
+function setTintColor() {
+    lottieView.setTintColor({
+        value: 'blue',
+        key: 'Pin 1.Shape 2.Fill 1.Color',
+        frame: 0
+    });
+}
+
+function playFromToProgress() {
+    lottieView.playFromToProgress({
+        from: 0.1,
+        to: 0.3
+    });
+}
+
+function playFromToFrame() {
+    lottieView.playFromToFrame({
+        from: 0,
+        to: 10
+    });
 }
